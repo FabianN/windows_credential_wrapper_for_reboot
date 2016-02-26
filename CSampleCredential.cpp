@@ -92,13 +92,8 @@ HRESULT CSampleCredential::Initialize(
     // Initialize the String value of all of our fields.
     if (SUCCEEDED(hr))
     {
-        hr = SHStrDupW(L"Reboot System", &_rgFieldStrings[SFI_I_WORK_IN_STATIC]);
+        hr = SHStrDupW(L"Reboot System", &_rgFieldStrings[SFI_REBOOT_LINK]);
     }
-   /* if (SUCCEEDED(hr))
-    {
-        hr = SHStrDupW(L"Reboot System", &_rgFieldStrings[SFI_DATABASE_COMBOBOX]);
-    }*/
-
     return hr;
 }
 
@@ -254,7 +249,7 @@ HRESULT CSampleCredential::GetStringValue(
             FIELD_STATE_PAIR *pfsp = _LookupLocalFieldStatePair(dwFieldID);
             if (pfsp != NULL)
             {
-                hr = SHStrDupW(_rgFieldStrings[SFI_I_WORK_IN_STATIC], ppwsz);
+				hr = SHStrDupW(_rgFieldStrings[SFI_REBOOT_LINK], ppwsz);
             }
             else
             {
@@ -284,21 +279,6 @@ HRESULT CSampleCredential::GetComboBoxValueCount(
         {
             hr = _pWrappedCredential->GetComboBoxValueCount(dwFieldID, pcItems, pdwSelectedItem);
         }
-        // Otherwise determine if we need to handle it.
-        else
-        {
-            FIELD_STATE_PAIR *pfsp = _LookupLocalFieldStatePair(dwFieldID);
-            if (pfsp != NULL)
-            {
-                *pcItems = ARRAYSIZE(s_rgDatabases);
-                *pdwSelectedItem = _dwDatabaseIndex;
-                hr = S_OK;
-            }
-            else
-            {
-                hr = E_INVALIDARG;
-            }
-        }
     }
 
     return hr;
@@ -323,19 +303,6 @@ HRESULT CSampleCredential::GetComboBoxValueAt(
         {
             hr = _pWrappedCredential->GetComboBoxValueAt(dwFieldID, dwItem, ppwszItem);
         }
-        // Otherwise determine if we need to handle it.
-        else
-        {
-            FIELD_STATE_PAIR *pfsp = _LookupLocalFieldStatePair(dwFieldID);
-            if ((pfsp != NULL) && (dwItem < ARRAYSIZE(s_rgDatabases)))
-            {
-                hr = SHStrDupW(s_rgDatabases[dwItem], ppwszItem);
-            }
-            else
-            {
-                hr = E_INVALIDARG;
-            }
-        }
     }
 
     return hr;
@@ -357,20 +324,6 @@ HRESULT CSampleCredential::SetComboBoxSelectedValue(
         if (_IsFieldInWrappedCredential(dwFieldID))
         {
             hr = _pWrappedCredential->SetComboBoxSelectedValue(dwFieldID, dwSelectedItem);
-        }
-        // Otherwise determine if we need to handle it.
-        else
-        {
-            FIELD_STATE_PAIR *pfsp = _LookupLocalFieldStatePair(dwFieldID);
-            if ((pfsp != NULL) && (dwSelectedItem < ARRAYSIZE(s_rgDatabases)))
-            {
-                _dwDatabaseIndex = dwSelectedItem;
-                hr = S_OK;
-            }
-            else
-            {
-                hr = E_INVALIDARG;
-            }
         }
     }
 
@@ -422,7 +375,27 @@ HRESULT CSampleCredential::SetStringValue(
 
     if (_pWrappedCredential != NULL)
     {
-        hr = _pWrappedCredential->SetStringValue(dwFieldID, pwz);
+
+		// If this field belongs to the wrapped credential, hand it off.
+        if (_IsFieldInWrappedCredential(dwFieldID))
+        {
+            hr = _pWrappedCredential->SetStringValue(dwFieldID, pwz);
+        }
+        // Otherwise determine if we need to handle it.
+        else
+        {
+            FIELD_STATE_PAIR *pfsp = _LookupLocalFieldStatePair(dwFieldID);
+            if ((pfsp != NULL))
+            {
+                PWSTR* ppwszStored = &_rgFieldStrings[dwFieldID];
+				CoTaskMemFree(*ppwszStored);
+				hr = SHStrDupW(pwz, ppwszStored);
+            }
+            else
+            {
+                hr = E_INVALIDARG;
+            }
+		}
     }
 
     return hr;
@@ -491,9 +464,6 @@ HRESULT CSampleCredential::CommandLinkClicked(__in DWORD dwFieldID)
 			si.cb = sizeof(si);
 			ZeroMemory( &pi, sizeof(pi) );
 
-			//std::wstring somePath(L"C:\\Windows\\System32\\shutdown.exe");
-			//std::wstring someCmdl(L"/r /t 0 /f");
-
 			// start the program up
 			CreateProcess( L"C:\\Windows\\System32\\shutdown.exe",   // the path
 			L"shutdown.exe /r /t 0 /f",        // Command line
@@ -512,8 +482,6 @@ HRESULT CSampleCredential::CommandLinkClicked(__in DWORD dwFieldID)
 			if (dwFieldID < ARRAYSIZE(_rgCredProvFieldDescriptors) && 
 				(CPFT_COMMAND_LINK == _rgCredProvFieldDescriptors[dwFieldID].cpft))
 			{
-				//HWND hwndOwner = NULL;
-
 				hr = S_OK;
 			}
 			else

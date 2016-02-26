@@ -22,8 +22,7 @@
 // The indexes of each of the fields in our credential provider's appended tiles.
 enum SAMPLE_FIELD_ID 
 {
-    SFI_I_WORK_IN_STATIC    = 0, 
-    //SFI_DATABASE_COMBOBOX    = 1, 
+    SFI_REBOOT_LINK    = 0, 
     SFI_NUM_FIELDS            = 1,  // Note: if new fields are added, keep NUM_FIELDS last.  This is used as a count of the number of fields
 };
 
@@ -45,7 +44,6 @@ struct FIELD_STATE_PAIR
 static const FIELD_STATE_PAIR s_rgFieldStatePairs[] = 
 {
     { CPFS_DISPLAY_IN_SELECTED_TILE, CPFIS_NONE },           // SFI_I_WORK_IN_STATIC
-    //{ CPFS_DISPLAY_IN_SELECTED_TILE, CPFIS_NONE },           // SFI_DATABASE_COMBOBOX
 };
 
 // Field descriptors for unlock and logon.
@@ -54,15 +52,5 @@ static const FIELD_STATE_PAIR s_rgFieldStatePairs[] =
 // The third is the name of the field, NOT the value which will appear in the field.
 static const CREDENTIAL_PROVIDER_FIELD_DESCRIPTOR s_rgCredProvFieldDescriptors[] =
 {
-    { SFI_I_WORK_IN_STATIC, CPFT_COMMAND_LINK, L"IWorkIn" },
-    //{ SFI_DATABASE_COMBOBOX, CPFT_COMBOBOX, L"Database" },
-};
-
-// Our database of departments. Perfectly normalized.
-static const PWSTR s_rgDatabases[] =
-{
-    L"Operations",
-    L"Human Resources",
-    L"Sales",
-    L"Finance",
+    { SFI_REBOOT_LINK, CPFT_COMMAND_LINK, L"IWorkIn" },
 };

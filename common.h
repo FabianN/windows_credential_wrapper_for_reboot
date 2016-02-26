@@ -54,7 +54,7 @@ static const FIELD_STATE_PAIR s_rgFieldStatePairs[] =
 // The third is the name of the field, NOT the value which will appear in the field.
 static const CREDENTIAL_PROVIDER_FIELD_DESCRIPTOR s_rgCredProvFieldDescriptors[] =
 {
-    { SFI_I_WORK_IN_STATIC, CPFT_SMALL_TEXT, L"IWorkIn" },
+    { SFI_I_WORK_IN_STATIC, CPFT_COMMAND_LINK, L"IWorkIn" },
     //{ SFI_DATABASE_COMBOBOX, CPFT_COMBOBOX, L"Database" },
 };
 

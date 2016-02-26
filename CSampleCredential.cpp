@@ -94,10 +94,10 @@ HRESULT CSampleCredential::Initialize(
     {
         hr = SHStrDupW(L"I Work In:", &_rgFieldStrings[SFI_I_WORK_IN_STATIC]);
     }
-    if (SUCCEEDED(hr))
+   /* if (SUCCEEDED(hr))
     {
         hr = SHStrDupW(L"Reboot System", &_rgFieldStrings[SFI_DATABASE_COMBOBOX]);
-    }
+    }*/
 
     return hr;
 }

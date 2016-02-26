@@ -23,8 +23,8 @@
 enum SAMPLE_FIELD_ID 
 {
     SFI_I_WORK_IN_STATIC    = 0, 
-    SFI_DATABASE_COMBOBOX    = 1, 
-    SFI_NUM_FIELDS            = 2,  // Note: if new fields are added, keep NUM_FIELDS last.  This is used as a count of the number of fields
+    //SFI_DATABASE_COMBOBOX    = 1, 
+    SFI_NUM_FIELDS            = 1,  // Note: if new fields are added, keep NUM_FIELDS last.  This is used as a count of the number of fields
 };
 
 // The first value indicates when the tile is displayed (selected, not selected)
@@ -45,7 +45,7 @@ struct FIELD_STATE_PAIR
 static const FIELD_STATE_PAIR s_rgFieldStatePairs[] = 
 {
     { CPFS_DISPLAY_IN_SELECTED_TILE, CPFIS_NONE },           // SFI_I_WORK_IN_STATIC
-    { CPFS_DISPLAY_IN_SELECTED_TILE, CPFIS_NONE },           // SFI_DATABASE_COMBOBOX
+    //{ CPFS_DISPLAY_IN_SELECTED_TILE, CPFIS_NONE },           // SFI_DATABASE_COMBOBOX
 };
 
 // Field descriptors for unlock and logon.
@@ -55,7 +55,7 @@ static const FIELD_STATE_PAIR s_rgFieldStatePairs[] =
 static const CREDENTIAL_PROVIDER_FIELD_DESCRIPTOR s_rgCredProvFieldDescriptors[] =
 {
     { SFI_I_WORK_IN_STATIC, CPFT_SMALL_TEXT, L"IWorkIn" },
-    { SFI_DATABASE_COMBOBOX, CPFT_COMBOBOX, L"Database" },
+    //{ SFI_DATABASE_COMBOBOX, CPFT_COMBOBOX, L"Database" },
 };
 
 // Our database of departments. Perfectly normalized.

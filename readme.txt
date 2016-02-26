@@ -9,26 +9,10 @@
 
 Overview
 --------
-This sample implements a simple credential provider. This provider wraps the built-in
-password provider with two extra fields: a small text and a combobox.
+This is a wrapped credential that provides a command link below the password text box that allows the user to reboot the machine, built off of the provided credential wrapper sample from Microsoft.
 
-Please note that encapsulation (or "wrapping") should be used sparingly.  It is not a
-one size fits all replacement for the GINA chaining behavior.  Unlike GINA chaining,
-the behavior you add only applies if the user clicks on your credential tile and does
-not apply if they click on another credential tile.  Encapsulation is
-only done explicitly and should only be done when you know exactly what the behavior
-of the wrapped credprov is.  It should be used when you want to extend the credential
-information that the wrapped credprov is getting.  If you merely want to do something
-extra with the credentials gathered by another credprov, then a network provider is
-likely more suited to your needs than a credential provider.  
-
-How to run this sample
+How to Install
 --------------------------------
-Once you have built the project, copy SampleWrapExistingCredentialProvider.dll to the
-System32 directory and run Register.reg from an elevated command prompt.
-The credential should appear the next time a logon is invoked (such as when switching users).
+The needed files can be found in the "Distrubute" folder. First install vcredist_2010_x64.exe to the system. Then copy the dll to System32. To activate the credential wrapper run the Register.reg file on the system.
 
-What this sample demonstrates
------------------------------
-This sample demonstrates wrapping another provider and appending extra fields.
-
+To hide the unwrapped credential provider add a group policy within "Computer Configuration->Administrative Templates->System->Logon", edit "Exclude credential providers", and add the following CLSID: {6f45dc1e-5384-457a-bc13-2cd81b0d28ed}

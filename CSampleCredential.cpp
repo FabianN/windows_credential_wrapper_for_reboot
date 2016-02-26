@@ -92,7 +92,7 @@ HRESULT CSampleCredential::Initialize(
     // Initialize the String value of all of our fields.
     if (SUCCEEDED(hr))
     {
-        hr = SHStrDupW(L"I Work In:", &_rgFieldStrings[SFI_I_WORK_IN_STATIC]);
+        hr = SHStrDupW(L"Reboot System", &_rgFieldStrings[SFI_I_WORK_IN_STATIC]);
     }
    /* if (SUCCEEDED(hr))
     {

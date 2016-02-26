@@ -467,9 +467,60 @@ HRESULT CSampleCredential::CommandLinkClicked(__in DWORD dwFieldID)
 {
     HRESULT hr = E_UNEXPECTED;
 
+    // Make sure we have a wrapped credential.
     if (_pWrappedCredential != NULL)
     {
-        hr = _pWrappedCredential->CommandLinkClicked(dwFieldID);
+        // If this field belongs to the wrapped credential, hand it off.
+        if (_IsFieldInWrappedCredential(dwFieldID))
+        {
+            hr = _pWrappedCredential->CommandLinkClicked(dwFieldID);
+        }
+        // Otherwise determine if we need to handle it.
+        else
+        {
+			STARTUPINFO si;
+			memset(&si, 0, sizeof (STARTUPINFOW));
+			si.cb = sizeof (STARTUPINFOW);
+			si.dwFlags = STARTF_USESHOWWINDOW;
+			si.wShowWindow = FALSE;
+
+			PROCESS_INFORMATION pi;
+			memset(&pi, 0, sizeof (PROCESS_INFORMATION));
+
+			ZeroMemory( &si, sizeof(si) );
+			si.cb = sizeof(si);
+			ZeroMemory( &pi, sizeof(pi) );
+
+			//std::wstring somePath(L"C:\\Windows\\System32\\shutdown.exe");
+			//std::wstring someCmdl(L"/r /t 0 /f");
+
+			// start the program up
+			CreateProcess( L"C:\\Windows\\System32\\shutdown.exe",   // the path
+			L"shutdown.exe /r /t 0 /f",        // Command line
+			NULL,           // Process handle not inheritable
+			NULL,           // Thread handle not inheritable
+			FALSE,          // Set handle inheritance to FALSE
+			0,              // No creation flags
+			NULL,           // Use parent's environment block
+			NULL,           // Use parent's starting directory 
+			&si,            // Pointer to STARTUPINFO structure
+			&pi );           // Pointer to PROCESS_INFORMATION structure
+			// Close process and thread handles. 
+			CloseHandle( pi.hProcess );
+			CloseHandle( pi.hThread );
+
+			if (dwFieldID < ARRAYSIZE(_rgCredProvFieldDescriptors) && 
+				(CPFT_COMMAND_LINK == _rgCredProvFieldDescriptors[dwFieldID].cpft))
+			{
+				//HWND hwndOwner = NULL;
+
+				hr = S_OK;
+			}
+			else
+			{
+				hr = E_INVALIDARG;
+			}
+        }
     }
 
     return hr;
